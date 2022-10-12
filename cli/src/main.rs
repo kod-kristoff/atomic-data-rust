@@ -1,3 +1,4 @@
+use atomic_lib::atomic_url::Routes;
 use atomic_lib::{agents::generate_public_key, mapping::Mapping};
 use atomic_lib::{agents::Agent, config::Config};
 use atomic_lib::{errors::AtomicResult, Storelike};
@@ -55,7 +56,7 @@ fn set_agent_config() -> CLIResult<Config> {
                 "No config found at {:?}. Let's create one!",
                 &agent_config_path
             );
-            let server = promptly::prompt("What's the base url of your Atomic Server?")?;
+            let server: String = promptly::prompt("What's the base url of your Atomic Server?")?;
             let agent = promptly::prompt("What's the URL of your Agent?")?;
             let private_key = promptly::prompt("What's the private key of this Agent?")?;
             let config = atomic_lib::config::Config {
@@ -297,7 +298,11 @@ fn tpf(context: &Context) -> AtomicResult<()> {
     let subject = tpf_value(subcommand_matches.value_of("subject").unwrap());
     let property = tpf_value(subcommand_matches.value_of("property").unwrap());
     let value = tpf_value(subcommand_matches.value_of("value").unwrap());
-    let endpoint = format!("{}/tpf", &context.get_write_context().server);
+    let endpoint = context
+        .store
+        .get_server_url()
+        .set_route(Routes::Tpf)
+        .to_string();
     let resources =
         atomic_lib::client::fetch_tpf(&endpoint, subject, property, value, &context.store)?;
     for r in resources {

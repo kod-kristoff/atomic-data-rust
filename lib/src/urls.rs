@@ -1,6 +1,5 @@
 //! Contains some of the most important Atomic Data URLs.
-
-use url::Url;
+//! See [crate::atomic_url] for the URL datatype.
 
 // Classes
 pub const CLASS: &str = "https://atomicdata.dev/classes/Class";
@@ -138,9 +137,9 @@ pub const DELETE: &str = "https://atomicdata.dev/methods/delete";
 pub const PUBLIC_AGENT: &str = "https://atomicdata.dev/agents/publicAgent";
 
 // Paths
-pub fn construct_path_import(base: &Url) -> String {
-    format!("{base}{PATH_IMPORT}")
-}
-
-pub const PATH_IMPORT: &str = "/import";
-pub const PATH_FETCH_BOOKMARK: &str = "/fetch-bookmark";
+pub const PATH_IMPORT: &str = "import";
+pub const PATH_FETCH_BOOKMARK: &str = "fetch-bookmark";
+pub const PATH_TPF: &str = "tpf";
+pub const PATH_PATH: &str = "path";
+pub const PATH_COMMITS: &str = "commits";
+pub const PATH_ENDPOINTS: &str = "endpoints";

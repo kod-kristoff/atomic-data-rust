@@ -66,7 +66,7 @@ fn populate_collections() {
         .map(|r| r.get_subject().into())
         .collect();
     println!("{:?}", subjects);
-    let collections_collection_url = format!("{}/collections", store.get_server_url());
+    let collections_collection_url = format!("{}collections", store.get_server_url());
     let collections_resource = store
         .get_resource_extended(&collections_collection_url, false, None)
         .unwrap();
@@ -91,7 +91,7 @@ fn populate_collections() {
 /// Also counts commits.
 fn destroy_resource_and_check_collection_and_commits() {
     let store = Db::init_temp("counter").unwrap();
-    let agents_url = format!("{}/agents", store.get_server_url());
+    let agents_url = store.get_server_url().set_route(Routes::Agents).to_string();
     let agents_collection_1 = store
         .get_resource_extended(&agents_url, false, None)
         .unwrap();
@@ -106,7 +106,10 @@ fn destroy_resource_and_check_collection_and_commits() {
     );
 
     // We will count the commits, and check if they've incremented later on.
-    let commits_url = format!("{}/commits", store.get_server_url());
+    let commits_url = store
+        .get_server_url()
+        .set_route(Routes::Commits)
+        .to_string();
     let commits_collection_1 = store
         .get_resource_extended(&commits_url, false, None)
         .unwrap();
@@ -153,7 +156,7 @@ fn destroy_resource_and_check_collection_and_commits() {
 
     _res.resource_new.unwrap().destroy(&store).unwrap();
     let agents_collection_3 = store
-        .get_resource_extended(&agents_url, false, None)
+        .get_resource_extended(&agents_url.to_string(), false, None)
         .unwrap();
     let agents_collection_count_3 = agents_collection_3
         .get(crate::urls::COLLECTION_MEMBER_COUNT)
@@ -184,7 +187,7 @@ fn destroy_resource_and_check_collection_and_commits() {
 #[test]
 fn get_extended_resource_pagination() {
     let store = Db::init_temp("get_extended_resource_pagination").unwrap();
-    let subject = format!("{}/commits?current_page=2", store.get_server_url());
+    let subject = format!("{}commits?current_page=2", store.get_server_url());
     // Should throw, because page 2 is out of bounds for default page size
     let _wrong_resource = store
         .get_resource_extended(&subject, false, None)

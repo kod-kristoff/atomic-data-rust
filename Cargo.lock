@@ -516,6 +516,7 @@ dependencies = [
  "tracing-opentelemetry",
  "tracing-subscriber",
  "ureq",
+ "url",
  "urlencoding",
 ]
 
