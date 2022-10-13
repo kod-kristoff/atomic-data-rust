@@ -16,7 +16,9 @@ use atomic_lib::{urls, Storelike};
 
 /// Returns the request with signed headers. Also adds a json-ad accept header - overwrite this if you need something else.
 fn build_request_authenticated(path: &str, appstate: &AppState) -> TestRequest {
-    let url = format!("{}{}", appstate.store.get_server_url(), path);
+    // remove last slash
+    let base = appstate.store.get_server_url().to_string();
+    let url = format!("{}{}", base.trim_end_matches('/'), path);
     let headers = atomic_lib::client::get_authentication_headers(
         &url,
         &appstate.store.get_default_agent().unwrap(),
@@ -70,7 +72,6 @@ async fn server_tests() {
     let resp = test::call_service(&app, req.to_request()).await;
     let is_success = resp.status().is_success();
     let body = get_body(resp);
-    println!("{:?}", body);
     assert!(is_success);
     assert!(body.as_str().contains("html"));
 
@@ -102,7 +103,7 @@ async fn server_tests() {
 
     // Should 401 (Unauthorized)
     let req =
-        test::TestRequest::with_uri("properties").insert_header(("Accept", "application/ad+json"));
+        test::TestRequest::with_uri("/properties").insert_header(("Accept", "application/ad+json"));
     let resp = test::call_service(&app, req.to_request()).await;
     assert_eq!(
         resp.status().as_u16(),
@@ -111,7 +112,7 @@ async fn server_tests() {
     );
 
     // Get JSON-AD
-    let req = build_request_authenticated("properties", &appstate);
+    let req = build_request_authenticated("/properties", &appstate);
     let resp = test::call_service(&app, req.to_request()).await;
     let body = get_body(resp);
     println!("DEBUG: {:?}", body);
@@ -122,7 +123,7 @@ async fn server_tests() {
     );
 
     // Get JSON-LD
-    let req = build_request_authenticated("properties", &appstate)
+    let req = build_request_authenticated("/properties", &appstate)
         .insert_header(("Accept", "application/ld+json"));
     let resp = test::call_service(&app, req.to_request()).await;
     assert!(resp.status().is_success(), "setup not returning JSON-LD");
@@ -133,7 +134,7 @@ async fn server_tests() {
     );
 
     // Get turtle
-    let req = build_request_authenticated("properties", &appstate)
+    let req = build_request_authenticated("/properties", &appstate)
         .insert_header(("Accept", "text/turtle"));
     let resp = test::call_service(&app, req.to_request()).await;
     assert!(resp.status().is_success());
@@ -145,7 +146,7 @@ async fn server_tests() {
 
     // Get Search
     // Does not test the contents of the results - the index isn't built at this point
-    let req = build_request_authenticated("search?q=setup", &appstate);
+    let req = build_request_authenticated("/search?q=setup", &appstate);
     let resp = test::call_service(&app, req.to_request()).await;
     assert!(resp.status().is_success());
     let body = get_body(resp);
@@ -156,7 +157,7 @@ async fn server_tests() {
     );
 }
 
-/// Gets the body from the response as a String. Why doen't actix provide this?
+/// Gets the body from the response as a String. Why doesn't actix provide this?
 fn get_body(resp: ServiceResponse) -> String {
     let boxbody = resp.into_body();
     let bytes = boxbody.try_into_bytes().unwrap();
