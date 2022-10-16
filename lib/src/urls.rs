@@ -137,9 +137,9 @@ pub const DELETE: &str = "https://atomicdata.dev/methods/delete";
 pub const PUBLIC_AGENT: &str = "https://atomicdata.dev/agents/publicAgent";
 
 // Paths
-pub const PATH_IMPORT: &str = "import";
-pub const PATH_FETCH_BOOKMARK: &str = "fetch-bookmark";
-pub const PATH_TPF: &str = "tpf";
-pub const PATH_PATH: &str = "path";
-pub const PATH_COMMITS: &str = "commits";
-pub const PATH_ENDPOINTS: &str = "endpoints";
+pub const PATH_IMPORT: &str = "/import";
+pub const PATH_FETCH_BOOKMARK: &str = "/fetch-bookmark";
+pub const PATH_TPF: &str = "/tpf";
+pub const PATH_PATH: &str = "/path";
+pub const PATH_COMMITS: &str = "/commits";
+pub const PATH_ENDPOINTS: &str = "/endpoints";
