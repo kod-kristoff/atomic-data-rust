@@ -7,9 +7,8 @@ They list a bunch of Messages.
 use crate::{
     commit::{CommitBuilder, CommitResponse},
     errors::AtomicResult,
-    storelike::Query,
     urls::{self, PARENT},
-    utils, Resource, Storelike, Value,
+    utils, Query, Resource, Storelike, Value,
 };
 
 // Find the messages for the ChatRoom

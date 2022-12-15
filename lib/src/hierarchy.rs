@@ -4,7 +4,7 @@
 
 use core::fmt;
 
-use crate::{errors::AtomicResult, storelike::Query, urls, AtomicError, Resource, Storelike};
+use crate::{errors::AtomicResult, urls, AtomicError, Query, Resource, Storelike};
 
 #[derive(Debug)]
 pub enum Right {

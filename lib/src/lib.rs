@@ -87,6 +87,7 @@ pub mod parse;
 #[cfg(feature = "db")]
 pub mod plugins;
 pub mod populate;
+pub mod query;
 pub mod resources;
 pub mod schema;
 pub mod serialize;
@@ -108,6 +109,7 @@ pub use commit::Commit;
 pub use db::Db;
 pub use errors::AtomicError;
 pub use errors::AtomicErrorType;
+pub use query::Query;
 pub use resources::Resource;
 pub use store::Store;
 pub use storelike::Storelike;

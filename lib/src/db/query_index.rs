@@ -2,11 +2,8 @@
 //! It relies on lexicographic ordering of keys, which Sled utilizes using `scan_prefix` queries.
 
 use crate::{
-    atoms::IndexAtom,
-    errors::AtomicResult,
-    storelike::{Query, QueryResult},
-    values::SortableValue,
-    Atom, Db, Resource, Storelike, Value,
+    atoms::IndexAtom, errors::AtomicResult, query::QueryResult, values::SortableValue, Atom, Db,
+    Query, Resource, Storelike, Value,
 };
 use serde::{Deserialize, Serialize};
 

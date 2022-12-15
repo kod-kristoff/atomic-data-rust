@@ -1,9 +1,7 @@
 //! Collections are dynamic resources that refer to multiple resources.
 //! They are constructed using a TPF query
 use crate::{
-    errors::AtomicResult,
-    storelike::{Query, ResourceCollection},
-    urls, Resource, Storelike, Value,
+    errors::AtomicResult, storelike::ResourceCollection, urls, Query, Resource, Storelike, Value,
 };
 
 #[derive(Debug)]
