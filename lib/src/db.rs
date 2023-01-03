@@ -26,6 +26,7 @@ use crate::{
     email::{self, MailMessage},
     endpoints::{default_endpoints, Endpoint, HandleGetContext},
     errors::{AtomicError, AtomicResult},
+    plugins::default_endpoints,
     query::QueryResult,
     resources::PropVals,
     storelike::Storelike,

@@ -19,6 +19,7 @@ See [STATUS.md](server/STATUS.md) to learn more about which features will remain
 - Add `POST` + `body` support for Endpoints #592
 - Refactor `Endpoint` handlers, uses a Context now #592
 - New sign up / register flow. Add `/register` Endpoint #489 #254
+- New sign up / register flow. Add `/register`, `/confirm-email`, `/add-public-key` endpoints  #489 #254
 - Add multi-tenancy support. Users can create their own `Drives` on subdomains. #288
 - Refactor URLs. `store.self_url()` returns an `AtomicUrl`, which provides methods to easily add paths, find subdomains and more.
 - Add support for subdomains, use a Wildcard TLS certificate #502

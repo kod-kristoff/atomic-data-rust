@@ -3,7 +3,7 @@
 //! Examples of endpoints are versions for resources, or (pages for) collections.
 //! See https://docs.atomicdata.dev/endpoints.html or https://atomicdata.dev/classes/Endpoint
 
-use crate::{errors::AtomicResult, plugins, urls, Db, Resource, Storelike, Value};
+use crate::{errors::AtomicResult, urls, Db, Resource, Storelike, Value};
 
 /// The function that is called when a POST request matches the path
 type HandleGet = fn(context: HandleGetContext) -> AtomicResult<Resource>;
