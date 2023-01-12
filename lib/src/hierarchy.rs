@@ -69,22 +69,24 @@ pub fn check_append(
     resource: &Resource,
     for_agent: &str,
 ) -> AtomicResult<String> {
-    let parent = if let Ok(parent) = resource.get_parent(store) {
-        parent
-    } else {
-        if resource
-            .get_classes(store)?
-            .iter()
-            .map(|c| c.subject.clone())
-            .collect::<String>()
-            .contains(urls::DRIVE)
-        {
-            return Ok(String::from("Drive without a parent can be created"));
+    let parent = match resource.get_parent(store) {
+        Ok(p) => p,
+        Err(e) => {
+            if resource
+                .get_classes(store)?
+                .iter()
+                .map(|c| c.subject.clone())
+                .collect::<String>()
+                .contains(urls::DRIVE)
+            {
+                return Ok(String::from("Drive without a parent can be created"));
+            }
+            return Err(AtomicError::unauthorized(format!(
+                "Can't append to {} because it's parent cannot be found: {}",
+                resource.get_subject(),
+                e
+            )));
         }
-        return Err(AtomicError::unauthorized(format!(
-            "No parent found for {}",
-            resource.get_subject()
-        )));
     };
     if let Ok(msg) = check_rights(store, &parent, for_agent, Right::Append) {
         Ok(msg)
