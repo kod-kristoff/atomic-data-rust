@@ -78,8 +78,8 @@ async fn server_tests() {
     assert!(body.as_str().contains("html"));
 
     // Should 200 (public)
-    let req =
-        test::TestRequest::with_uri("/properties").insert_header(("Accept", "application/ad+json"));
+    let req = test::TestRequest::with_uri("/collections/properties")
+        .insert_header(("Accept", "application/ad+json"));
     let resp = test::call_service(&app, req.to_request()).await;
     assert_eq!(resp.status().as_u16(), 200, "resource should be public");
 
@@ -104,8 +104,8 @@ async fn server_tests() {
     drive.save(store).unwrap();
 
     // Should 401 (Unauthorized)
-    let req =
-        test::TestRequest::with_uri("/properties").insert_header(("Accept", "application/ad+json"));
+    let req = test::TestRequest::with_uri("/collections/properties")
+        .insert_header(("Accept", "application/ad+json"));
     let resp = test::call_service(&app, req.to_request()).await;
     assert_eq!(
         resp.status().as_u16(),
@@ -114,7 +114,7 @@ async fn server_tests() {
     );
 
     // Get JSON-AD
-    let req = build_request_authenticated("/properties", &appstate);
+    let req = build_request_authenticated("/collections/properties", &appstate);
     let resp = test::call_service(&app, req.to_request()).await;
     let body = get_body(resp);
     println!("DEBUG: {:?}", body);
@@ -125,7 +125,7 @@ async fn server_tests() {
     );
 
     // Get JSON-LD
-    let req = build_request_authenticated("/properties", &appstate)
+    let req = build_request_authenticated("/collections/properties", &appstate)
         .insert_header(("Accept", "application/ld+json"));
     let resp = test::call_service(&app, req.to_request()).await;
     assert!(resp.status().is_success(), "setup not returning JSON-LD");
@@ -136,7 +136,7 @@ async fn server_tests() {
     );
 
     // Get turtle
-    let req = build_request_authenticated("/properties", &appstate)
+    let req = build_request_authenticated("/collections/properties", &appstate)
         .insert_header(("Accept", "text/turtle"));
     let resp = test::call_service(&app, req.to_request()).await;
     assert!(resp.status().is_success());

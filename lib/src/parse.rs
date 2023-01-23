@@ -338,6 +338,7 @@ fn parse_json_ad_map_to_resource(
                     validate_rights: parse_opts.for_agent.is_some(),
                     validate_previous_commit: false,
                     validate_for_agent: parse_opts.for_agent.clone(),
+                    validate_subject_url_parent: true,
                     update_index: true,
                 };
 
@@ -557,8 +558,8 @@ mod test {
             .import(include_str!("../test_files/local_id.json"), &parse_opts)
             .unwrap();
 
-        let reference_subject = generate_id_from_local_id(&importer, "reference");
-        let my_subject = generate_id_from_local_id(&importer, "my-local-id");
+        let reference_subject = generate_id_from_local_id(&importer, "parent");
+        let my_subject = generate_id_from_local_id(&importer, "parent/my-local-id");
         let found = store.get_resource(&my_subject).unwrap();
         let found_ref = store.get_resource(&reference_subject).unwrap();
 

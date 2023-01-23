@@ -187,7 +187,12 @@ fn destroy_resource_and_check_collection_and_commits() {
 #[test]
 fn get_extended_resource_pagination() {
     let store = Db::init_temp("get_extended_resource_pagination").unwrap();
-    let subject = format!("{}commits?current_page=2", store.get_server_url());
+    let num = 3;
+    let subject = format!(
+        "{}collections/commits?current_page={}",
+        store.get_server_url(),
+        num
+    );
     // Should throw, because page 2 is out of bounds for default page size
     let _wrong_resource = store
         .get_resource_extended(&subject, false, None)
@@ -202,7 +207,7 @@ fn get_extended_resource_pagination() {
         .unwrap()
         .to_int()
         .unwrap();
-    assert_eq!(cur_page, 2);
+    assert_eq!(cur_page, num);
     assert_eq!(resource.get_subject(), &subject_with_page_size);
 }
 
