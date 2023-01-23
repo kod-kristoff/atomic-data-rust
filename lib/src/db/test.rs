@@ -156,7 +156,7 @@ fn destroy_resource_and_check_collection_and_commits() {
 
     _res.resource_new.unwrap().destroy(&store).unwrap();
     let agents_collection_3 = store
-        .get_resource_extended(&agents_url.to_string(), false, None)
+        .get_resource_extended(&agents_url, false, None)
         .unwrap();
     let agents_collection_count_3 = agents_collection_3
         .get(crate::urls::COLLECTION_MEMBER_COUNT)
