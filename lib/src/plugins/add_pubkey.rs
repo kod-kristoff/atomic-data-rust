@@ -8,10 +8,10 @@ use serde::{Deserialize, Serialize};
 use crate::{
     agents::Agent,
     email::{EmailAddress, MailAction, MailMessage},
-    endpoints::Endpoint,
+    endpoints::{Endpoint, HandleGetContext},
     errors::AtomicResult,
     plugins::utils::return_success,
-    urls, Db, Resource, Storelike,
+    urls, Resource, Storelike,
 };
 
 pub fn request_email_add_pubkey() -> Endpoint {
@@ -21,6 +21,7 @@ pub fn request_email_add_pubkey() -> Endpoint {
         description: "Requests an email to add a new PublicKey to an Agent.".to_string(),
         shortname: "request-pubkey-reset".to_string(),
         handle: Some(handle_request_email_pubkey),
+        handle_post: None,
     }
 }
 
@@ -31,6 +32,7 @@ pub fn confirm_add_pubkey() -> Endpoint {
         description: "Confirms a token to add a new Public Key.".to_string(),
         shortname: "request-pubkey-reset".to_string(),
         handle: Some(handle_confirm_add_pubkey),
+        handle_post: None,
     }
 }
 
@@ -39,11 +41,12 @@ struct AddPubkeyToken {
     agent: String,
 }
 
-pub fn handle_request_email_pubkey(
-    url: url::Url,
-    store: &Db,
-    _for_agent: Option<&str>,
-) -> AtomicResult<Resource> {
+pub fn handle_request_email_pubkey(context: HandleGetContext) -> AtomicResult<Resource> {
+    let HandleGetContext {
+        subject: url,
+        store,
+        for_agent: _,
+    } = context;
     let mut email_option: Option<EmailAddress> = None;
     for (k, v) in url.query_pairs() {
         if let "email" = k.as_ref() {
@@ -96,12 +99,13 @@ pub fn handle_request_email_pubkey(
     return_success()
 }
 
-#[tracing::instrument(skip(store))]
-pub fn handle_confirm_add_pubkey(
-    url: url::Url,
-    store: &Db,
-    for_agent: Option<&str>,
-) -> AtomicResult<Resource> {
+#[tracing::instrument]
+pub fn handle_confirm_add_pubkey(context: HandleGetContext) -> AtomicResult<Resource> {
+    let HandleGetContext {
+        subject: url,
+        store,
+        for_agent: _,
+    } = context;
     let mut token_opt: Option<String> = None;
     let mut pubkey_option = None;
 
